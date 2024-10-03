@@ -1,8 +1,11 @@
 services:
-  marzban:
-    image: gozargah/marzban:latest
-    restart: always
-    env_file: .env
+  panel:
+    image: ghcr.io/ton-bypass/panel:latest
+    restart: unless-stopped
     network_mode: host
+    env_file: .env
+    environment:
+      UVICORN_HOST: ${UVICORN_HOST:-0.0.0.0}
+      UVICORN_PORT: ${UVICORN_PORT:-8000}
     volumes:
       - /var/lib/marzban:/var/lib/marzban

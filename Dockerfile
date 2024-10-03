@@ -1,24 +1,25 @@
-FROM python:3.10-slim
+FROM docker.io/python:3.10-slim
 
-ENV PYTHONUNBUFFERED 1
+ARG XRAY_INSTALL="https://gist.githubusercontent.com/bypass-ton/86db93e552f0e3aeb9785953f7a96421/raw/install-xray.sh"
 
-WORKDIR /code
-
-RUN apt-get update \
-    && apt-get install -y curl unzip gcc python3-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN bash -c "$(curl -L https://github.com/Gozargah/Marzban-scripts/raw/master/install_latest_xray.sh)"
-
-COPY ./requirements.txt /code/
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONUNBUFFERED=1 \
+    PIP_ROOT_USER_ACTION=ignore
 
 COPY . /code
+WORKDIR /code
 
-RUN apt-get remove -y curl unzip gcc python3-dev
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --no-install-suggests curl unzip gcc python3-dev && \
+    bash -c "$(curl -sL ${XRAY_INSTALL})" && \
+    pip install --no-cache-dir --upgrade -r /code/requirements.txt && \
+    apt-get remove -y curl unzip gcc python3-dev && \
+    apt-get autoremove -y && \
+    apt-get clean all && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt
 
-RUN ln -s /code/marzban-cli.py /usr/bin/marzban-cli \
-    && chmod +x /usr/bin/marzban-cli \
-    && marzban-cli completion install --shell bash
+RUN ln -s /code/marzban-cli.py /usr/bin/marzban-cli && \
+    chmod +x /usr/bin/marzban-cli && \
+    marzban-cli completion install --shell bash
 
-CMD ["bash", "-c", "alembic upgrade head; python main.py"]
+CMD ["bash", "-c", "alembic upgrade head; python -O main.py"]

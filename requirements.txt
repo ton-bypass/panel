@@ -19,7 +19,7 @@ grpcio==1.50.0
 grpcio-tools==1.44.0
 h11==0.14.0
 httptools==0.5.0
-idna==3.4
+idna==3.7
 importlib-metadata==5.1.0
 importlib-resources==5.10.0
 jdatetime==4.1.1

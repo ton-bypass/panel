@@ -74,5 +74,5 @@ uvloop==0.17.0
 watchfiles==0.18.1
 websocket-client==1.7.0
 websockets==10.4
-wrapt==1.14.1
+wrapt==1.16.0
 zipp==3.10.0

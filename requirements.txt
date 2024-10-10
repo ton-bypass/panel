@@ -34,7 +34,7 @@ passlib==1.7.4
 Pillow==9.4.0
 plumbum==1.8.1
 protobuf==3.20.3
-psutil==5.9.4
+psutil==6.0.0
 psycopg2-binary==2.9.7
 pyasn1==0.4.8
 pycparser==2.21
